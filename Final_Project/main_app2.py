@@ -3,9 +3,9 @@ import os
 import numpy as np
 import pandas as pd
 import csv
-from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
-from PyQt5 import QtCore as qtc
+from PyQt6 import QtWidgets as qtw
+from PyQt6 import QtGui as qtg
+from PyQt6 import QtCore as qtc
 from .designer_app import Ui_MainWindow
 from .dialog import Ui_SettingsDialog
 from .build_face_dataset import start_capture
@@ -35,16 +35,16 @@ class CsvTableModel(qtc.QAbstractTableModel):
 
     def data(self, index, role):
         # original if statement:
-        # if role == qtc.Qt.DisplayRole:
+        # if role == qtc.Qt.ItemDataRole.DisplayRole:
         # Add EditRole so that the cell is not cleared when editing
-        if role in (qtc.Qt.DisplayRole, qtc.Qt.EditRole):
+        if role in (qtc.Qt.ItemDataRole.DisplayRole, qtc.Qt.ItemDataRole.EditRole):
             return self._data[index.row()][index.column()]
 
     # Additional features methods:
 
     def headerData(self, section, orientation, role):
 
-        if orientation == qtc.Qt.Horizontal and role == qtc.Qt.DisplayRole:
+        if orientation == qtc.Qt.Orientation.Horizontal and role == qtc.Qt.ItemDataRole.DisplayRole:
             return self._headers[section]
         else:
             return super().headerData(section, orientation, role)
@@ -52,17 +52,17 @@ class CsvTableModel(qtc.QAbstractTableModel):
     def sort(self, column, order):
         self.layoutAboutToBeChanged.emit()  # needs to be emitted before a sort
         self._data.sort(key=lambda x: x[column])
-        if order == qtc.Qt.DescendingOrder:
+        if order == qtc.Qt.SortOrder.DescendingOrder:
             self._data.reverse()
         self.layoutChanged.emit()  # needs to be emitted after a sort
 
     # Methods for Read/Write
 
     def flags(self, index):
-        return super().flags(index) | qtc.Qt.ItemIsEditable
+        return super().flags(index) | qtc.Qt.ItemFlag.ItemIsEditable
 
     def setData(self, index, value, role):
-        if index.isValid() and role == qtc.Qt.EditRole:
+        if index.isValid() and role == qtc.Qt.ItemDataRole.EditRole:
             self._data[index.row()][index.column()] = value
             self.dataChanged.emit(index, index, [role])
             return True
@@ -149,11 +149,15 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
         super().accept()
 
     def reset(self):
+        protopath = path.join(self.directory, 'constants', 'deploy.prototxt.txt')
+        modelpath = path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+        outpath = path.join(self.directory, 'changes', 'dataset')
         self.prototxt_file.setText(protopath)
         self.model_file.setText(modelpath)
         self.output_folder.setText(outpath)
         self.confidence_1.setProperty("value", 0.8)
         self.confidence_2.setProperty("value", 0.8)
+        self.show_warnings_cb.setChecked(True)
 
     #         self.accept()
     #         self.settings.setValue(
@@ -179,7 +183,7 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
                 qtc.QDir.homePath(),
                 "Text Files (*.txt) ;;Python Files (*.py) ;;All Files (*)",
                 "Python Files (*.py)",
-                #             qtw.QFileDialog.DontUseNativeDialog | qtw.QFileDialog.DontResolveSymlinks
+                #             qtw.QFileDialog.Option.DontUseNativeDialog | qtw.QFileDialog.Option.DontResolveSymlinks
             )
         else:
             filename = qtw.QFileDialog.getExistingDirectory(self, "Select Folder")
@@ -205,8 +209,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
         self.setWindowTitle("Class Attendance Management System")
         # Main UI code goes here
         # Icons#
-        start_recognitionIcon = self.style().standardIcon(qtw.QStyle.SP_MediaPlay)
-        settingsIcon = self.style().standardIcon(qtw.QStyle.SP_DialogHelpButton)
+        start_recognitionIcon = self.style().standardIcon(qtw.QStyle.StandardPixmap.SP_MediaPlay)
+        settingsIcon = self.style().standardIcon(qtw.QStyle.StandardPixmap.SP_DialogHelpButton)
         self.actionSettings.setIcon(settingsIcon)
         self.actionStart_Recognition.setIcon(start_recognitionIcon)
 
@@ -228,8 +232,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 self,
                 "Important Information!",
                 "Make sure to capture atleast 10 images of the face at different angles, pose and illumination etc!!!, Press q to exit the camera and k to save images.",
-                qtw.QMessageBox.Ok,
-                qtw.QMessageBox.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
             )
         # End main UI code
         self.show()
@@ -240,8 +244,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
             self,
             "Training Model!",
             "Please wait as this may take some time!",
-            qtw.QMessageBox.Ok,
-            qtw.QMessageBox.Ok,
+            qtw.QMessageBox.StandardButton.Ok,
+            qtw.QMessageBox.StandardButton.Ok,
         )
         confidence_1 = self.settings.value("confidence_1", 0.8, type=float)
         tm = train_model(confidence_1)
@@ -249,8 +253,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
             self,
             "Trained Model!",
             "Face embeddings have been extracted and the model trained!",
-            qtw.QMessageBox.Ok,
-            qtw.QMessageBox.Ok,
+            qtw.QMessageBox.StandardButton.Ok,
+            qtw.QMessageBox.StandardButton.Ok,
         )
     directory = path.dirname(__file__)
 
@@ -262,16 +266,16 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 self,
                 "Attendance Taken!",
                 str(students) + " found and attendance record updated",
-                qtw.QMessageBox.Ok,
-                qtw.QMessageBox.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
             )
         else:
             qtw.QMessageBox.information(
                 self,
                 "Attendance Taken!",
                 "No student details updated",
-                qtw.QMessageBox.Ok,
-                qtw.QMessageBox.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
             )
 
     def capture_biometrics(self):
@@ -320,8 +324,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 self,
                 "Face Capture Successful!",
                 str(total) + " face images of " + str(name) + " stored",
-                qtw.QMessageBox.Ok,
-                qtw.QMessageBox.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
+                qtw.QMessageBox.StandardButton.Ok,
             )
         else:
 
@@ -329,8 +333,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 self,
                 "Error Message",
                 "You have not Entered all the required details. Please Enter the required details and try again.",
-                qtw.QMessageBox.Close,
-                qtw.QMessageBox.Close,
+                qtw.QMessageBox.StandardButton.Close,
+                qtw.QMessageBox.StandardButton.Close,
             )
             ## print("Couldn't process, all fields not filled")
 
@@ -394,10 +398,10 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 self,
                 "Register Again?",
                 "User Details already registered, Do you want to continue?",
-                qtw.QMessageBox.No | qtw.QMessageBox.Yes,
-                qtw.QMessageBox.Yes,
+                qtw.QMessageBox.StandardButton.No | qtw.QMessageBox.StandardButton.Yes,
+                qtw.QMessageBox.StandardButton.Yes,
             )
-            if confirm != qtw.QMessageBox.Yes:
+            if confirm != qtw.QMessageBox.StandardButton.Yes:
                 # print("[ERROR] Exiting Application")
                 sys.exit(-1)
 
@@ -423,8 +427,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                     self,
                     "Course Not Found!",
                     "No details found for " + course_code + ", Please try a new entry.",
-                    qtw.QMessageBox.Close,
-                    qtw.QMessageBox.Close,
+                    qtw.QMessageBox.StandardButton.Close,
+                    qtw.QMessageBox.StandardButton.Close,
                 )
 
     def save_file(self):
@@ -518,10 +522,10 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
             self,
             "Quit Application?",
             "Are you sure you want to Quit?",
-            qtw.QMessageBox.No | qtw.QMessageBox.Yes,
-            qtw.QMessageBox.Yes,
+            qtw.QMessageBox.StandardButton.No | qtw.QMessageBox.StandardButton.Yes,
+            qtw.QMessageBox.StandardButton.Yes,
         )
-        if answer == qtw.QMessageBox.Yes:
+        if answer == qtw.QMessageBox.StandardButton.Yes:
             event.accept()  # accept the event and close the application
         else:
             event.ignore()

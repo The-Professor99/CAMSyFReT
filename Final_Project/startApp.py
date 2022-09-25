@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
     QLabel,
@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QCheckBox,
 )
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 import time
 from .Registration import CreateNewUser
 from .main_app2 import MainWindow
@@ -100,8 +100,8 @@ class LoginUI(QWidget):
                 self,
                 "No User Registered!",
                 "No user has been registered on this system, please go to the sign up page to register!",
-                QMessageBox.Ok,
-                QMessageBox.Ok,
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
             )
             return None
         username = self.name_entry.text()
@@ -112,8 +112,8 @@ class LoginUI(QWidget):
                 self,
                 "Login Successful!",
                 "Login Successful!",
-                QMessageBox.Ok,
-                QMessageBox.Ok,
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
             )
             self.close()
             self.create_new_user_dialog = MainWindow()
@@ -124,8 +124,8 @@ class LoginUI(QWidget):
                 self,
                 "Error Message",
                 "The username or password is incorrect.",
-                QMessageBox.Close,
-                QMessageBox.Close,
+                QMessageBox.StandardButton.Close,
+                QMessageBox.StandardButton.Close,
             )
 
     def displayPassword(self, state):
@@ -133,10 +133,10 @@ class LoginUI(QWidget):
         If checkbutton is enabled, view password.
         Else, mask password so others can not see it.
         """
-        if state == Qt.Checked:
-            self.password_entry.setEchoMode(QLineEdit.Normal)
+        if state == Qt.CheckState.Checked.value:
+            self.password_entry.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
-            self.password_entry.setEchoMode(QLineEdit.Password)
+            self.password_entry.setEchoMode(QLineEdit.EchoMode.Password)
 
     def createNewUser(self):
         """
@@ -154,9 +154,9 @@ class LoginUI(QWidget):
 #         """
 #         # set up message box
 #         answer = QMessageBox.question(self, "Quit Application?",
-#             "Are you sure you want to Quit?", QMessageBox.No | QMessageBox.Yes,
-#             QMessageBox.Yes)
-#         if answer == QMessageBox.Yes or confirmation == "Yes":
+#             "Are you sure you want to Quit?", QMessageBox.StandardButton.No | QMessageBox.StandardButton.Yes,
+#             QMessageBox.StandardButton.Yes)
+#         if answer == QMessageBox.StandardButton.Yes or confirmation == "Yes":
 #             event.accept() # accept the event and close the application
 #         else:
 #             event.ignore()

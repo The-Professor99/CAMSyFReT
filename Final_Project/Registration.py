@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
     QMessageBox,
@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
 )
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap
 import pickle
 from os import path
 
@@ -72,7 +72,7 @@ class CreateNewUser(QWidget):
         pswd_label.move(50, 240)
 
         self.pswd_entry = QLineEdit(self)
-        self.pswd_entry.setEchoMode(QLineEdit.Password)
+        self.pswd_entry.setEchoMode(QLineEdit.EchoMode.Password)
         self.pswd_entry.move(130, 240)
         self.pswd_entry.resize(200, 20)
 
@@ -80,7 +80,7 @@ class CreateNewUser(QWidget):
         confirm_label.move(50, 270)
 
         self.confirm_entry = QLineEdit(self)
-        self.confirm_entry.setEchoMode(QLineEdit.Password)
+        self.confirm_entry.setEchoMode(QLineEdit.EchoMode.Password)
         self.confirm_entry.move(130, 270)
         self.confirm_entry.resize(200, 20)
 
@@ -104,8 +104,8 @@ class CreateNewUser(QWidget):
                 self,
                 "Error Message",
                 "The passwords you entered do not match. Please try again.",
-                QMessageBox.Close,
-                QMessageBox.Close,
+                QMessageBox.StandardButton.Close,
+                QMessageBox.StandardButton.Close,
             )
         else:
             filename = path.join(self.directory, 'files', 'users.pkl')
@@ -115,8 +115,8 @@ class CreateNewUser(QWidget):
                         self,
                         "Error Message",
                         "This system has already been signed up on, please input your Login details to login.",
-                        QMessageBox.Close,
-                        QMessageBox.Close,
+                        QMessageBox.StandardButton.Close,
+                        QMessageBox.StandardButton.Close,
                     )
             except FileNotFoundError:
                 with open(filename, "ab") as f:
