@@ -4,15 +4,15 @@
 About
 =====
 
-This is a class attendance management system based on face recognition technology. It uses pre-trained opencv caffe models to detect and capture the faces of students which are then saved as images. This is the enrollment phase. 
+- This is a class attendance management system based on face recognition technology. It uses pre-trained opencv caffe models to detect and capture the faces of students which are then saved as images. This is the enrollment phase. 
 
-In the training phase, these images are passed to a model which extracts the feature vectors(embeddings) that quantify each face in the image, a labelEncoder function is then used to add names to the embeddings which are subsequently used to train a Support Vector Machine (SVM) learning model.
+- In the training phase, these images are passed to a model which extracts the feature vectors(embeddings) that quantify each face in the image, a labelEncoder function is then used to add names to the embeddings which are subsequently used to train a Support Vector Machine (SVM) learning model.
  
-When the 'Take Attendance' process is initiated, the system once again captures the faces of students in the class at that point in time and the trained SVM model is used to determine who, by percentage probabilities, is in the new captured images. This percentage probability is compared to a predefined threshold(confidence level) and if it meets it, the labelEncoder is queried for the most likely name. This is the recognition phase.
+- When the 'Take Attendance' process is initiated, the system once again captures the faces of students in the class at that point in time and the trained SVM model is used to determine who, by percentage probabilities, is in the new captured images. This percentage probability is compared to a predefined threshold(confidence level) and if it meets it, the labelEncoder is queried for the most likely name. This is the recognition phase.
 
-When a student's face is recognized/authenticated, his/her attendance record is updated accordingly.
+- When a student's face is recognized/authenticated, his/her attendance record is updated accordingly.
 
-Attendance records as well as records of enrolled students can also be viewed and modified on the system.
+- Attendance records as well as records of enrolled students can also be viewed and modified on the system.
 
 
 ## Installation
@@ -31,13 +31,17 @@ Run the command below in the project's root folder to install the requirements.
 
     $ pip install -r requirements.txt
     
-However, after installation, trying to run the app may result in errors which states that "This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem". This is because installing opencv4 using pip may not always work. If this is the case on your system, please read this guide on [installing opencv4](https://pyimagesearch.com/2018/08/15/how-to-install-opencv-4-on-ubuntu/).
+<strong>If you don't have python installed on your system or you simply want to use the project without having to run any command, don't worry, we've got you covered</strong>
+
+Simply navigate to this [startup file](./CAMSyFReT/start_CAMSyFReT) and double click on it to get the project running.
+
+<em>Please note that this executable file may only work on *NIX operating systems</em>
 
 ## How To Use
 
-[Activate the virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
+[Activate the virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/) - <em>Discard this if you're using the executable file</em>
 
-Run the below command to start up the project
+Run the below command to start up the project - <em>Discard this if you're using the executable file</em>
 
     $ python run.py
 
@@ -67,15 +71,10 @@ Upon successful [login](./Images/app_images/1_register_&_login.png), you can enr
 
 ### Deployment
 
-[Source distributions](https://packaging.python.org/en/latest/glossary/#term-Source-Distribution-or-sdist) and [build distributions](https://packaging.python.org/en/latest/glossary/#term-Built-Distribution) have been generated for publishing to [Pypi](https://pypi.org/). They are located in the [dist](./dist/) folder.
-A sample publish to Pypi's test server has been made and can be accessed [here](https://test.pypi.org/project/ClassAttendanceManagementSystem/1.0/). However, as stated on pypi, publishes made to pypi's test server are occasionally deleted so should the link be broken, please make use of the content of this repository instead.
+The project has been published to [Pypi](https://pypi.org/) and can be accessed [here](https://test.pypi.org/project/ClassAttendanceManagementSystem/1.0/)
 
 ### Issues
 I recently discovered an issue. Trying to take an attendance or capture biometrics may shutdown the app, if this is the case on your system and you receive an error messaging on the terminal stating: "can't open camera by index", please attach a webcam and try again.
-
-### Future work
-
-To make a pyinstaller executable of the project, this way, a user has to only install the executable to use it instead of having to go through the stress of installing python and setting up the project themselves. This hasn't been made possible yet as a result of the challenge outlined in the [requirement's section](#requirements).
 
 ### Other Details
 - Some [UML diagrams](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/what-is-uml/) drafted out in the course of running the project can be accessed [here](./Images/uml_diagrams)

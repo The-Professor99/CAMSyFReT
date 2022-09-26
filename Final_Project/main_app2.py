@@ -120,9 +120,9 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
         self.show_warnings_cb.setChecked(
             settings.value("show_warnings", False, type=bool)
         )
-        protopath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(self.directory, 'constants', 'deploy.prototxt.txt')
-        modelpath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
-        outpath = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
+        protopath = path.join('constants', 'deploy.prototxt.txt') #path.join(self.directory, 'constants', 'deploy.prototxt.txt') #resourcePath(path.join('constants', 'deploy.prototxt.txt')) 
+        modelpath = path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel') #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel') #resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel'))
+        outpath = path.join('changes', 'dataset') #path.join(self.directory, 'changes', 'dataset') #resourcePath(path.join('changes', 'dataset')) 
         self.prototxt_file.setText(
             settings.value("prototxt_file", protopath, type=str)
         )
@@ -159,9 +159,9 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
         super().accept()
 
     def reset(self):
-        protopath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(self.directory, 'constants', 'deploy.prototxt.txt')
-        modelpath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
-        outpath = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
+        protopath = path.join(self.directory, 'constants', 'deploy.prototxt.txt') #resourcePath(path.join('constants', 'deploy.prototxt.txt')) 
+        modelpath = path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel') #resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) 
+        outpath = path.join(self.directory, 'changes', 'dataset') #resourcePath(path.join('changes', 'dataset')) 
         self.prototxt_file.setText(protopath)
         self.model_file.setText(modelpath)
         self.output_folder.setText(outpath)
