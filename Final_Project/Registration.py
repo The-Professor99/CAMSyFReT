@@ -11,6 +11,16 @@ from PyQt6.QtGui import QFont, QPixmap
 import pickle
 from os import path
 
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        
+        base_path = sys._MEIPASS
+        base_path = path.join(base_path, "Final_Project")
+    except Exception:
+        base_path = path.dirname(__file__)
+    return path.join(base_path, relative_path)
 
 class CreateNewUser(QWidget):
     def __init__(self):
@@ -108,7 +118,7 @@ class CreateNewUser(QWidget):
                 QMessageBox.StandardButton.Close,
             )
         else:
-            filename = path.join(self.directory, 'files', 'users.pkl')
+            filename = resourcePath(path.join('files', 'users.pkl'))
             try:
                 with open(filename, "rb") as f:
                     QMessageBox.warning(

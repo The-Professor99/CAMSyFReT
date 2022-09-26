@@ -16,6 +16,18 @@ all_names = []
 directory = path.dirname(__file__)
 from dateutil.parser import parse
 
+
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        
+        base_path = sys._MEIPASS
+        base_path = path.join(base_path, "Final_Project")
+    except Exception:
+        base_path = path.dirname(__file__)
+    return path.join(base_path, relative_path)
+
 def is_date(string, fuzzy=False):
     """
     Return whether the string can be interpreted as a date.
@@ -41,7 +53,7 @@ def mark_attendance(name, probability):
 
 
 def pandas_manipulation():
-    file_name = path.join(directory, 'attendance_records', 'Attendance_Records.csv')
+    file_name = resourcePath(path.join('attendance_records', 'Attendance_Records.csv')) #path.join(directory, 'attendance_records', 'Attendance_Records.csv')
 
     try:
         v = pd.read_csv(file_name)
@@ -103,22 +115,22 @@ def save_attendance_records(records, path):
 
 def takeAttendance(confidence_set):
     # print("[INFO] loading face detector...")
-    protoPath = path.join(directory, 'constants', 'deploy.prototxt.txt')
-    modelPath = path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+    protoPath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(directory, 'constants', 'deploy.prototxt.txt')
+    modelPath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
     detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
     confidence_used = confidence_set
 
     # load our serialized face embedding model from disk
     # print("[INFO] loading face recognizer...")
-    model_path = path.join(directory, "openface_nn4.small2.v1.t7")
+    model_path = resourcePath('openface_nn4.small2.v1.t7') #path.join(directory, "openface_nn4.small2.v1.t7")
 
     embedder = cv2.dnn.readNetFromTorch(model_path)
 
     # load the actual face recognition model along with the label encoder
-    recognizer_path = path.join(directory, 'output', 'recognizer.pickle')
+    recognizer_path = resourcePath(path.join('output', 'recognizer.pickle')) #path.join(directory, 'output', 'recognizer.pickle')
 
     recognizer = pickle.loads(open(recognizer_path, "rb").read())
-    le_path = path.join(directory, 'output', 'le.pickle')
+    le_path = resourcePath(path.join('output', 'le.pickle')) #path.join(directory, 'output', 'le.pickle')
     le = pickle.loads(open(le_path, "rb").read())
 
     # initialize the video stream then allow the camera sensor to warm up

@@ -10,6 +10,16 @@ import csv
 import sys
 from os import path
 
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+        base_path = path.join(base_path, "Final_Project")
+    except Exception:
+        base_path = path.dirname(__file__)
+    return path.join(base_path, relative_path)
+    
 # load OpenCV's haar cascade for face detection from disk
 def start_capture(name, prototxt_file, model_file, output_folder, confidence):
     
@@ -22,12 +32,13 @@ def start_capture(name, prototxt_file, model_file, output_folder, confidence):
     #     output_folder = "changes/datasets" # make sure these initializations are present before continuing
     name = name.replace(" ", "_")
     # print(name)
-    output_folder = os.path.join(directory, output_folder, name)
+    relative_path = path.join(output_folder, name)
+    output_folder = resourcePath(relative_path) #os.path.join(directory, output_folder, name)
     # print("Output folder", output_folder)
 
     # print("[INFO] loading model...")
-    prototxt_file = path.join(directory, 'constants', 'deploy.prototxt.txt')
-    model_file = path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+    prototxt_file = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(directory, 'constants', 'deploy.prototxt.txt')
+    model_file = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
     net = cv2.dnn.readNetFromCaffe(prototxt_file, model_file)
 
     # print("Path: ", output_folder)

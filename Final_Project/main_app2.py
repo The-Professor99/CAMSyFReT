@@ -14,6 +14,16 @@ from .train_model1 import train_model
 from os import path
 from dateutil.parser import parse
 
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        
+        base_path = sys._MEIPASS
+        base_path = path.join(base_path, "Final_Project")
+    except Exception:
+        base_path = path.dirname(__file__)
+    return path.join(base_path, relative_path)
 
 class CsvTableModel(qtc.QAbstractTableModel):
     """The model for a CSV table."""
@@ -110,9 +120,9 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
         self.show_warnings_cb.setChecked(
             settings.value("show_warnings", False, type=bool)
         )
-        protopath = path.join(self.directory, 'constants', 'deploy.prototxt.txt')
-        modelpath = path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
-        outpath = path.join(self.directory, 'changes', 'dataset')
+        protopath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(self.directory, 'constants', 'deploy.prototxt.txt')
+        modelpath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+        outpath = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
         self.prototxt_file.setText(
             settings.value("prototxt_file", protopath, type=str)
         )
@@ -149,9 +159,9 @@ class SettingsDialog(qtw.QDialog, Ui_SettingsDialog):
         super().accept()
 
     def reset(self):
-        protopath = path.join(self.directory, 'constants', 'deploy.prototxt.txt')
-        modelpath = path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
-        outpath = path.join(self.directory, 'changes', 'dataset')
+        protopath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(self.directory, 'constants', 'deploy.prototxt.txt')
+        modelpath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+        outpath = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
         self.prototxt_file.setText(protopath)
         self.model_file.setText(modelpath)
         self.output_folder.setText(outpath)
@@ -280,9 +290,9 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
 
     def capture_biometrics(self):
         
-        protopath = path.join(self.directory, 'constants', 'deploy.prototxt.txt')
-        modelpath = path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
-        outpath = path.join(self.directory, 'changes', 'dataset')
+        protopath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(self.directory, 'constants', 'deploy.prototxt.txt')
+        modelpath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(self.directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+        outpath = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
         prototxt_file = self.settings.value(
             "prototxt_file", protopath, type=str
         )
@@ -366,7 +376,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
             }
         )
 
-        course_data_file = path.join(self.directory, course + "_Students_data.csv")
+        relative_path = course + "_Students_data.csv"
+        course_data_file = resourcePath(relative_path) #path.join(self.directory, course + "_Students_data.csv")
         if not os.path.exists(course_data_file):
             # print("Yeah creating...")
             with open(course_data_file, "w+") as f:
@@ -408,7 +419,7 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
     #                 CSV
     def select_file(self):
         try:
-            filename = path.join(self.directory, 'attendance_records', 'Attendance_Records.csv')
+            filename = resourcePath(path.join('attendance_records', 'Attendance_Records.csv')) #path.join(self.directory, 'attendance_records', 'Attendance_Records.csv')
             self.model = CsvTableModel(filename)
         except FileNotFoundError:
             # print("Here 1")
@@ -419,7 +430,8 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
         course_code = self.course_detail.text().lower()
         if course_code:
             try:
-                filename = path.join(self.directory, course_code + "_Students_data.csv") 
+                relative_path = course_code + "_Students_data.csv"
+                filename = resourcePath(relative_path) #path.join(self.directory, course_code + "_Students_data.csv") 
                 self.model = CsvTableModel(filename)
                 self.tableView.setModel(self.model)
             except FileNotFoundError:
@@ -450,7 +462,7 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
             return False
 
     def manipulate_data(self):
-        file_name = path.join(self.directory, 'attendance_records', 'Attendance_Records.csv')
+        file_name = resourcePath(path.join('attendance_records', 'Attendance_Records.csv')) #path.join(self.directory, 'attendance_records', 'Attendance_Records.csv')
         try:
             v = pd.read_csv(file_name)
             v.drop(
@@ -464,7 +476,7 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
                 inplace=True,
             )
         except FileNotFoundError:
-            dirs = path.join(self.directory, 'changes', 'dataset')
+            dirs = resourcePath(path.join('changes', 'dataset')) #path.join(self.directory, 'changes', 'dataset')
             all_names = os.listdir(dirs)
             x = []
             for name in all_names:
@@ -488,7 +500,7 @@ class MainWindow(qtw.QMainWindow, Ui_MainWindow):
         return v
 
     def save_and_refresh(self, first=None):
-        path_ =  path.join(self.directory, 'attendance_records')
+        path_ =  resourcePath('attendance_records') #path.join(self.directory, 'attendance_records')
         if not first:
             # print("Here")
             self.save_file()

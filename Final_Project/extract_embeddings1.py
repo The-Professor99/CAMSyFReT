@@ -6,24 +6,36 @@ import pickle
 import cv2
 import os
 from os import path
+import sys
 
 
+def resourcePath(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        
+        base_path = sys._MEIPASS
+        base_path = path.join(base_path, "Final_Project")
+    except Exception:
+        base_path = path.dirname(__file__)
+    return path.join(base_path, relative_path)
+    
 def extractEmbeddings(confidence_set):
     # Load our serialized face detector from disk
     # print("[INFO] loading face detector...")
     directory = path.dirname(__file__)
-    protoPath = path.join(directory, 'constants', 'deploy.prototxt.txt')
-    modelPath = path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
+    protoPath = resourcePath(path.join('constants', 'deploy.prototxt.txt')) #path.join(directory, 'constants', 'deploy.prototxt.txt')
+    modelPath = resourcePath(path.join('constants', 'res10_300x300_ssd_iter_140000.caffemodel')) #path.join(directory, 'constants', 'res10_300x300_ssd_iter_140000.caffemodel')
     detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
 
     # Load our serialized face embedding model from disk
     # print("[INFO] loading face recognizer...")
-    model_path = path.join(directory, "openface_nn4.small2.v1.t7")
+    model_path = resourcePath('openface_nn4.small2.v1.t7') #path.join(directory, "openface_nn4.small2.v1.t7")
 
     embedder = cv2.dnn.readNetFromTorch(model_path)
 
     # print("[INFO] quantifying faces...")
-    dataset_path = path.join(directory, 'changes', 'dataset')
+    dataset_path = resourcePath(path.join('changes', 'dataset')) #path.join(directory, 'changes', 'dataset')
     imagePaths = list(paths.list_images(dataset_path))
     # print("Image Paths: ", imagePaths)
     confidence_used = confidence_set
@@ -106,7 +118,7 @@ def extractEmbeddings(confidence_set):
     # print("[INFO] serializing {} encodings...".format(total))
     data = {"embeddings": knownEmbeddings, "names": knownNames}
     # print("All Data: ", knownNames)
-    embeddings_path = path.join(directory, 'output', 'embeddings.pickle')
+    embeddings_path = resourcePath(path.join('output', 'embeddings.pickle')) #path.join(directory, 'output', 'embeddings.pickle')
     f = open(embeddings_path, "wb")
     f.write(pickle.dumps(data))
     f.close()
