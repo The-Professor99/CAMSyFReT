@@ -21,11 +21,8 @@ This project can be installed by running the following commands in your preferre
 
     $ git clone https://github.com/The-Professor99/CAMSyFReT.git
     
-The project can also be installed using pip. simply run
+The project can also be installed using pip. Visit [this page](https://pypi.org/project/CAMSyFReT/) for guidelines.
 
-    $ pip install CAMSyFReT
-    
-You can access the pypi published version [here](https://pypi.org/project/CAMSyFReT/)
 
 ## Requirements
 
