@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="CAMSyFReT",
-    version="1.1.0",
+    version="1.1.1",
     author="Eze Ihechi Festus",
     author_email="festusihechi99@gmail.com",
     description="A class Attendance Management System Using Face Recognition Technology",
@@ -36,10 +36,11 @@ setup(
     package_data={
         "Final_Project.attendance_records": ["*.*"],
         "Final_Project.changes.dataset.unknown": ["*.jpg"],
-        "Final_Project.constants": ["*.txt", "*.caffemodel"],
+        "Final_Project.constants": ["*.txt","*.prototxt", "*.caffemodel"],
         "Final_Project.files": ["*.*"],
         "Final_Project.images": ["*.png"],
         "Final_Project.output": ["*.*"],
+        "Final_Project": ["*.t7"],
         "": ["*.txt", "*.rst"],
     },
     entry_points={"console_scripts": ["Final_Project = Final_Project.__main__:main"]},
