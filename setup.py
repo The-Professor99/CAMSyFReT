@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="CAMSyFReT",
-    version="1.0.0",
+    version="1.0.1",
     author="Eze Ihechi Festus",
     author_email="festusihechi99@gmail.com",
     description="A class Attendance Management System Using Face Recognition Technology",
-    url="https://github.com/The-Professor99/final_year_project.git",
+    url="https://github.com/The-Professor99/CAMSyFReT",
     license="MIT",
     long_description=open("README.rst", "r").read(),
     keywords="class attendance management system face recognition technology opencv",

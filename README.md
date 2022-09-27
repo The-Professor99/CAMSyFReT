@@ -20,6 +20,12 @@ About
 This project can be installed by running the following commands in your preferred directory.
 
     $ git clone https://github.com/The-Professor99/CAMSyFReT.git
+    
+The project can also be installed using pip. simply run
+
+    $ pip install CAMSyFReT
+    
+You can access the pypi published version [here](https://pypi.org/project/CAMSyFReT/)
 
 ## Requirements
 
@@ -31,9 +37,10 @@ Run the command below in the project's root folder to install the requirements.
 
     $ pip install -r requirements.txt
     
+### Using The Executable File
 <strong>If you don't have python installed on your system or you simply want to use the project without having to run any command, don't worry, we've got you covered</strong>
 
-Simply navigate to this [startup file](./CAMSyFReT/start_CAMSyFReT) and double click on it to get the project running.
+After cloning this repository, simply navigate to this [startup file](./CAMSyFReT/start_CAMSyFReT) and double click on it to get the project running.
 
 <em>Please note that this executable file may only work on *NIX operating systems</em>
 
@@ -71,10 +78,11 @@ Upon successful [login](./Images/app_images/1_register_&_login.png), you can enr
 
 ### Deployment
 
-The project has been published to [Pypi](https://pypi.org/) and can be accessed [here](https://test.pypi.org/project/ClassAttendanceManagementSystem/1.0/)
+The project has been published to [Pypi](https://pypi.org/) and can be accessed [here](https://pypi.org/project/CAMSyFReT/)
 
 ### Issues
-I recently discovered an issue. Trying to take an attendance or capture biometrics may shutdown the app, if this is the case on your system and you receive an error messaging on the terminal stating: "can't open camera by index", please attach a webcam and try again.
+- Trying to take an attendance or capture biometrics may shutdown the app, if this is the case on your system and you receive an error messaging on the terminal stating: "can't open camera by index", please attach a webcam and try again.
+- If an error occurs when trying to train the model on captured images, go to the settings page and click on `reset`. After this, capture the images again and try training the model again.
 
 ### Other Details
 - Some [UML diagrams](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/what-is-uml/) drafted out in the course of running the project can be accessed [here](./Images/uml_diagrams)
