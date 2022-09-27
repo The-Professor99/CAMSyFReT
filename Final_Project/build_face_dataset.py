@@ -32,7 +32,7 @@ def start_capture(name, prototxt_file, model_file, output_folder, confidence):
     #     output_folder = "changes/datasets" # make sure these initializations are present before continuing
     name = name.replace(" ", "_")
     # print(name)
-    relative_path = path.join(output_folder, name)
+    relative_path = path.join("changes", "dataset", name)
     output_folder = resourcePath(relative_path) #os.path.join(directory, output_folder, name)
     # print("Output folder", output_folder)
 
